@@ -61,5 +61,17 @@
             ],
         });
     });
+
+    function deleteSong(id) {
+        $.ajax({
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            url: '/song/' + id,
+            type: 'DELETE',
+            success: function(result) {
+                toastr.error('Deleted!');
+                location.reload();
+            }
+        })
+    }
 </script>
 @endsection

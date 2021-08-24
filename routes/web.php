@@ -19,3 +19,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/songs', 'SongController@list');
+Route::delete('/song/{id}', 'SongController@destroy');
+Route::post('/song', 'SongController@store');

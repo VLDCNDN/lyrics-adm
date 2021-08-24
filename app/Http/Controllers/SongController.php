@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Song;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class SongController extends Controller
 {
@@ -51,7 +52,7 @@ class SongController extends Controller
             $tmpSong['title']= $song->title;
             $tmpSong['artist'] = $song->artist;
             $tmpSong['created_at'] = $song->created_at;
-            $tmpSong['action'] = '<button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>';
+            $tmpSong['action'] = '<button type="button" class="btn btn-danger btn-sm" onClick="deleteSong('.$song->id.')"><i class="fas fa-trash"></i></button>';
 
             $data[] = $tmpSong;
         }
@@ -84,7 +85,21 @@ class SongController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id = Auth::user()->id;
+
+        $song = new Song;
+        $song->title = $request->title;
+        $song->artist = $request->artist;
+        $song->lyrics = $request->lyrics;
+        $song->added_by_id = $id;
+        $resp = $song->save();
+        
+        $response = "";
+        if($resp == 1) {
+            $response = "OK";
+        }
+
+        return $response;
     }
 
     /**
@@ -127,8 +142,10 @@ class SongController extends Controller
      * @param  \App\Song  $song
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Song $song)
+    public function destroy($id)
     {
-        //
+        DB::table('songs')->where('id', $id)->delete();
+
+        return 'DONE';
     }
 }
