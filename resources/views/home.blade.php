@@ -3,6 +3,8 @@
 @section('content')
 <div class="container">
     @include('components.addlyricsmodal')
+    @include('components.viewlyricsmodal')
+    @include('components.editlyricsmodal')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-4">
@@ -33,8 +35,11 @@
 </div>
 
 <script>
+    var table;
+    var selectedRowId = "";
+
     $(function() {
-        $('#songsTable').DataTable({
+        table = $('#songsTable').DataTable({
             paging: true,
             pageLength: 10,
             searching: true,
@@ -72,6 +77,47 @@
                 location.reload();
             }
         })
+    }
+
+    async function editSong() {
+        
+        let songDetails = await requestSongInfo(selectedRowId);
+        if(songDetails != null) {
+            $('#viewLyricsModal').modal("hide");
+            $('#editLyricsModal').modal("show");
+            $('#updateId').val(selectedRowId);
+            $('#updateTitle').val(songDetails.title);
+            $('#updateArtist').val(songDetails.artist);
+            $('#updateLyrics').text(songDetails.lyrics);
+
+        }
+    }
+
+    $('#songsTable tbody').on('click', 'tr', async function () {
+        let row = table.row(this).data().id;
+        selectedRowId = row;
+        let title = $('#showTitle');
+        let artist = $('#showArtist');
+        let lyrics = $('#showLyrics');
+
+        title.text("");
+        artist.text("");
+        lyrics.text("");
+
+        let songDetails = await requestSongInfo(row);
+        if(songDetails != null) {
+            title.text(songDetails.title);
+            artist.text(songDetails.artist);
+            lyrics.text(songDetails.lyrics);
+            
+            $('#viewLyricsModal').modal("show");
+        }
+
+    });
+
+    async function requestSongInfo(id) {
+        let resp = await $.get('/song/' + id);
+        return resp;
     }
 </script>
 @endsection

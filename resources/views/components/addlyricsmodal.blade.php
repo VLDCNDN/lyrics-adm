@@ -10,15 +10,15 @@
       <div class="modal-body">
         <form method="POST" action="/song">
           <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Title</label>
+            <label for="title" class="col-form-label">Title</label>
             <input type="text" class="form-control" id="title" name="title">
           </div>
           <div class="form-group">
-            <label for="message-text" class="col-form-label">Artist</label>
+            <label for="artist" class="col-form-label">Artist</label>
             <input type="text" class="form-control" id="artist" name="artist">
           </div>
           <div class="form-group">
-            <label for="message-text" class="col-form-label">Lyrics</label>
+            <label for="lyrics" class="col-form-label">Lyrics</label>
             <textarea class="form-control" id="lyrics" name="lyrics" rows="15" cols="30"></textarea>
           </div>
       </div>
@@ -53,7 +53,7 @@
         if(result == "OK") {
           toastr.success('Added');
         }
-        
+
         location.reload();
       }
     });

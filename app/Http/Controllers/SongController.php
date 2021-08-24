@@ -52,7 +52,14 @@ class SongController extends Controller
             $tmpSong['title']= $song->title;
             $tmpSong['artist'] = $song->artist;
             $tmpSong['created_at'] = $song->created_at;
-            $tmpSong['action'] = '<button type="button" class="btn btn-danger btn-sm" onClick="deleteSong('.$song->id.')"><i class="fas fa-trash"></i></button>';
+            $tmpSong['action'] = '
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" class="btn btn-danger btn-sm" onClick="deleteSong('.$song->id.')"><i class="fas fa-trash"></i></button>                    
+                    </div>
+                    
+                </div>
+            ';
 
             $data[] = $tmpSong;
         }
@@ -65,16 +72,6 @@ class SongController extends Controller
         ]; 
 
         return response()->json($datatableResponse);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -102,45 +99,29 @@ class SongController extends Controller
         return $response;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Song  $song
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Song $song)
+    public function show($id)
     {
-        //
+        $song = DB::table('songs')->find($id);
+        
+        return response()->json($song);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Song  $song
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Song $song)
+    public function update($id, Request $request)
     {
-        //
-    }
+        $toUpdate = $request->all();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Song  $song
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Song $song)
-    {
-        //
+        DB::table('songs')
+            ->where('id', $id)
+            ->update($toUpdate);
+
+        return 'DONE';
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Song  $song
-     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     * @return String
      */
     public function destroy($id)
     {
