@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Song;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SongController extends Controller
 {
@@ -12,8 +13,57 @@ class SongController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function datatable()
+    public function list(Request $request)
     {
+        $draw = $request->draw;
+        $order = $request->order;
+        $start = $request->start;
+        $length = $request->length;
+        $search = $request->search;
+
+        $columns = [
+            0 => "id",
+            1 => "title",
+            2 => "artist",
+            3 => "created_at"
+        ];
+
+        $data= [];
+        $query = DB::table('songs');
+        $songs = "";
+
+        if($search["value"] != NULL) {
+            $query = $query->where('title', 'like'. '%'.$search["value"].'%')
+                ->orWhere('artist', 'like', '%' . $search["value"] .'%');
+        }
+        
+        $count = $query->count();
+
+        $songs = $query->select('id','title','artist','created_at')
+            ->offset($start)
+            ->limit($length)
+            ->orderBy($columns[$order[0]['column']], $order[0]['dir'])
+            ->get();
+
+        foreach($songs as $song) {
+            $tmpSong = [];
+            $tmpSong['id'] = $song->id;
+            $tmpSong['title']= $song->title;
+            $tmpSong['artist'] = $song->artist;
+            $tmpSong['created_at'] = $song->created_at;
+            $tmpSong['action'] = '<button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>';
+
+            $data[] = $tmpSong;
+        }
+
+        $datatableResponse = [
+            "draw" => $draw,
+            "recordsTotal" => $count,
+            "recordsFiltered" => $count,
+            "data" => $data
+        ]; 
+
+        return response()->json($datatableResponse);
     }
 
     /**

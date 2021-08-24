@@ -16,6 +16,7 @@
                     <table id="songsTable" class="">
                         <thead>
                             <tr>
+                                <th>id</th>
                                 <th>Title</th>
                                 <th>Artist</th>
                                 <th>Created Date</th>
@@ -33,11 +34,31 @@
 
 <script>
     $(function() {
-        $.get('/song/datatable', function(data) {
-            alert(data);
-        });
-
         $('#songsTable').DataTable({
+            paging: true,
+            pageLength: 10,
+            searching: true,
+            ordering: true,
+            autoWidth: true,
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: {
+                type: "GET",
+                url: "/songs",
+                datatypes: "json"
+            },
+            columns: [
+                { data: "id" },
+                { data: "title" },
+                { data: "artist" },
+                { data: "created_at" },
+                { data: "action" }
+            ],
+            columnDefs: [
+                { orderable: false, targets: [4] },
+                { visible: false, targets: [0] }
+            ],
         });
     });
 </script>
