@@ -18,7 +18,7 @@
                             <tr>
                                 <th>Title</th>
                                 <th>Artist</th>
-                                <th>Release Date</th>
+                                <th>Created Date</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -33,6 +33,10 @@
 
 <script>
     $(function() {
+        $.get('/song/datatable', function(data) {
+            alert(data);
+        });
+
         $('#songsTable').DataTable({
         });
     });

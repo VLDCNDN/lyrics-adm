@@ -19,13 +19,13 @@
           </div>
           <div class="form-group">
             <label for="message-text" class="col-form-label">Lyrics</label>
-            <textarea class="form-control" id="lyrics" name="lyrics" rows="20" cols="50"></textarea>
+            <textarea class="form-control" id="lyrics" name="lyrics" rows="15" cols="30"></textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
+        <button type="button" class="btn btn-primary">Add</button>
       </div>
     </div>
   </div>
